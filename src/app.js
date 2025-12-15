@@ -17,7 +17,10 @@ app.use(express.static("./public"));
 // Third-Party Middlewares
 app.use(
   cors({
-    origin: [env.DEVELOPMENT_FRONTEND_URL, env.PRODUCTION_FRONTEND_URL],
+    origin:
+      env.NODE_ENV === "development"
+        ? "http://localhost:5173"
+        : "https://candidate-management-system-chi.vercel.app",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   })
 );
