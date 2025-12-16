@@ -1,4 +1,7 @@
-import { validateCandidate } from "../schemas/candidate.schema.js";
+import {
+  validateCandidate,
+  validateUpdateCandidate,
+} from "../schemas/candidate.schema.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { ApiError, ApiSuccess } from "../utils/api-response.js";
 import {
@@ -62,7 +65,7 @@ const getCandidate = asyncHandler(async (req, res, next) => {
 
 const updateCandidate = asyncHandler(async (req, res, next) => {
   // Validate candidate data
-  const { error, value } = validateCandidate(req.body);
+  const { error, value } = validateUpdateCandidate(req.body);
 
   if (error) {
     next(new ApiError(422, error.details[0].message.replaceAll('"', "")));
@@ -96,11 +99,17 @@ const updateCandidate = asyncHandler(async (req, res, next) => {
   }
 
   // Update candidate
-  await Candidate.findByIdAndUpdate(req.params.id, value, { new: true });
+  const updatedCandidate = await Candidate.findByIdAndUpdate(
+    req.params.id,
+    value,
+    { new: true }
+  );
 
   res
     .status(200)
-    .json(new ApiSuccess(200, "Candidate updated successfully", candidate));
+    .json(
+      new ApiSuccess(200, "Candidate updated successfully", updatedCandidate)
+    );
 });
 
 const deleteCandidate = asyncHandler(async (req, res, next) => {

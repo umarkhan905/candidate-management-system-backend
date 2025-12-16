@@ -22,6 +22,31 @@ const candidateSchema = Joi.object({
   loomLink: Joi.string().allow(""),
 });
 
+const updateCandidateSchema = Joi.object({
+  name: Joi.string().optional(),
+  email: Joi.string().email().optional(),
+  phone: Joi.string()
+    .regex(/^(\+92|0)?(3\d{2}|\d{3})(?:-?\d{3}-?\d{4})?$/)
+    .min(11)
+    .optional(),
+  city: Joi.string().optional(),
+  institute: Joi.string().optional(),
+  educationLevel: Joi.string().optional(),
+  graduationYear: Joi.string().optional(),
+  currentPosition: Joi.string().optional(),
+  currentCompany: Joi.string().optional(),
+  experienceYears: Joi.string().optional(),
+  noticePeriod: Joi.string().optional(),
+  reasonToSwitch: Joi.string().allow("").optional(),
+  currentSalary: Joi.string().optional(),
+  expectedSalary: Joi.string().optional(),
+  appliedPosition: Joi.string().optional(),
+  loomLink: Joi.string().allow("").optional(),
+});
+
 const validateCandidate = (candidate) => candidateSchema.validate(candidate);
 
-export { validateCandidate };
+const validateUpdateCandidate = (candidate) =>
+  updateCandidateSchema.validate(candidate);
+
+export { validateCandidate, validateUpdateCandidate };
